@@ -1,2 +1,1 @@
-# huh
-Hopfen &amp; Hanf
+https://chrisophy.github.io/huh
