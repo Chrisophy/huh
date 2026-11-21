@@ -1897,37 +1897,6 @@ function sfx(n){
  SND.last[n]=now;
  try{if(SFX[n])SFX[n]();}catch(e){}
 }
-const MUS={
- city:{sc:[0,2,4,7,9],b:60,bpm:104,w:'triangle',v:.05},
- rain:{sc:[0,3,5,7,10],b:57,bpm:78,w:'sine',v:.06},
- snow:{sc:[0,2,4,7,9],b:72,bpm:90,w:'sine',v:.05},
- heat:{sc:[0,2,4,7,9],b:62,bpm:96,w:'triangle',v:.05},
- strand:{sc:[0,2,4,7,9],b:64,bpm:116,w:'triangle',v:.055},
- vulkan:{sc:[0,1,5,7,8],b:45,bpm:72,w:'sawtooth',v:.03},
- berge:{sc:[0,2,4,7,9],b:74,bpm:88,w:'sine',v:.05},
- hoehle:{sc:[0,3,7,10],b:52,bpm:58,w:'sine',v:.05,sp:1},
- rhein:{sc:[0,2,4,5,7,9],b:60,bpm:124,w:'square',v:.03},
- amsterdam:{sc:[0,4,7,9,11],b:67,bpm:100,w:'triangle',v:.05}
-};
-function musKey(){
- if(ZONE)return ZONE.name;
- const w=WXC.type;return w==='rain'?'rain':w==='snow'?'snow':w==='heat'?'heat':'city';
-}
-function mfreq(m){return 440*Math.pow(2,(m-69)/12);}
-function musicTick(dt){
- if(!SND.on||!SND.c||SND.c.state!=='running'||!G||UI.title)return;
- SND.mt-=dt;if(SND.mt>0)return;
- const M=MUS[musKey()]||MUS.city;
- const bpm=M.bpm*(1+(G.mood-55)/380)*(P.ride?1.12:1);
- SND.mt=60/bpm/2;SND.mn++;
- const s=M.sc,n=SND.mn;
- if(n%8===0)tn(mfreq(M.b-24+s[(n>>3)%s.length]),SND.mt*6,'sine',M.v*1.6);
- if(M.sp&&chance(.7))return;
- if(chance(.62)){
-  const deg=s[Math.floor(Math.random()*s.length)],oct=chance(.3)?12:0;
-  tn(mfreq(M.b+deg+oct),SND.mt*1.7,M.w,M.v);
- }
-}
 function toggleSnd(){
  SND.on=!SND.on;
  try{localStorage.setItem('hh_snd',SND.on?'1':'0');}catch(e){}
@@ -2841,7 +2810,6 @@ function frame(now){
   cam.x=clamp(px,0,MW*TS-VW);cam.y=clamp(py,0,MH*TS-VH);
   trafficUpdate(dt);pedsUpdate(dt);
  }else if(!menuActive()||(UI.screen==='sit'&&!UI.modal))update(dt);
- musicTick(dt);
  render();
  hudT+=dt;if(hudT>.1){hudT=0;hudUpdate();if(G&&!UI.title)renderMini();}
  requestAnimationFrame(frame);
@@ -2851,7 +2819,7 @@ UI.screen='title';
 render2();
 requestAnimationFrame(frame);
 window.HHW={H:H,G:()=>G,P:P,V:V,keys:keys,update:update,UI:UI,ACT:ACT,world:{T:T,MKS:MKS,MKQ:MKQ,MW:MW,MH:MH,TS:TS,isSolid:isSolid,YARD:YARD},ents:()=>({traffic:traffic,peds:peds,cops:cops,thugs:thugs,chasers:chasers,wanted:wanted}),
- doAction:doAction,computeFlow:computeFlow,startWanted:startWanted,renderFrame:render,hudUpdate:hudUpdate,cam:cam,Z:()=>ZONE,enterZone:enterZone,leaveZone:leaveZone,WORLDS:WORLDS,PICKS:()=>PICKS,FX:()=>FX,PR:()=>PR,peds:()=>peds,kids:()=>kids,startRace:startRace,throwIt:throwIt,mood:mood,doDrink:doDrink,doSmoke:doSmoke,nearSeat:nearSeat,sitDown:sitDown,standUp:standUp,NOGO:NOGO,WXC:WXC,fadeNow:()=>fade,toCity:toCity,startFade:startFade,pickZone:pickZone,genZone:genZone,SOL:SOL,tget:tget,RIDES:()=>RIDES,CAS:()=>CAS,SND:SND,sfx:sfx,takeRide:takeRide,leaveRide:leaveRide,nearRide:nearRide,ctxBuild:ctxBuild,startBuild:startBuild,stealChair:stealChair,doGluehwein:doGluehwein,shootWater:shootWater,rideDrive:rideDrive,musicTick:musicTick,promptText:promptText,isDeep:isDeep};
+ doAction:doAction,computeFlow:computeFlow,startWanted:startWanted,renderFrame:render,hudUpdate:hudUpdate,cam:cam,Z:()=>ZONE,enterZone:enterZone,leaveZone:leaveZone,WORLDS:WORLDS,PICKS:()=>PICKS,FX:()=>FX,PR:()=>PR,peds:()=>peds,kids:()=>kids,startRace:startRace,throwIt:throwIt,mood:mood,doDrink:doDrink,doSmoke:doSmoke,nearSeat:nearSeat,sitDown:sitDown,standUp:standUp,NOGO:NOGO,WXC:WXC,fadeNow:()=>fade,toCity:toCity,startFade:startFade,pickZone:pickZone,genZone:genZone,SOL:SOL,tget:tget,RIDES:()=>RIDES,CAS:()=>CAS,SND:SND,sfx:sfx,takeRide:takeRide,leaveRide:leaveRide,nearRide:nearRide,ctxBuild:ctxBuild,startBuild:startBuild,stealChair:stealChair,doGluehwein:doGluehwein,shootWater:shootWater,rideDrive:rideDrive,promptText:promptText,isDeep:isDeep};
 ['keydown','pointerdown','touchstart','click'].forEach(function(ev){document.addEventListener(ev,sndWake,true);});
 })();
 </script>
