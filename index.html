@@ -1057,7 +1057,7 @@ function doSmoke(){
 }
 function startFade(txt,cb){sfx('warp');fade={t:0,dur:2.2,txt:txt,cb:cb,done:false};keys.left=keys.right=keys.up=keys.down=0;}
 function pickZone(not){
- const m=G.mood,w={strand:m>=65?6:1.2,vulkan:m<=35?6:1,berge:2.2,hoehle:2.2,amsterdam:1.6,maerchen:1.8};
+ const m=G.mood,w={strand:m>=65?6:1.2,vulkan:m<=35?6:1,berge:2.2,hoehle:2.2,amsterdam:1.6,maerchen:1.8,schlaraff:1.2};
  if(not)delete w[not];
  let s=0;for(const k in w)s+=w[k];
  let r=Math.random()*s;
@@ -1128,7 +1128,7 @@ function zonePeds(z){
  if(z.name==='strand'){add(4,[SA,SH],q=>{q.gun=chance(.55);q.gc=pick(GUNC);});strandKids(z,out);add(5,[SA],q=>{q.st='lie';q.stT=1e9;q.tw=pick(['#e5604d','#2e86c1','#f1c40f','#27ae60','#8e44ad']);});}
  else if(z.name==='vulkan'){add(4,[AS]);}
  else if(z.name==='berge'){add(4,[SN,IC]);[[14,12],[28,11],[40,16]].forEach(s=>{const q=mkPed(s[0]*TS+16,s[1]*TS+16);q.snow=true;q.hp=0;out.push(q);});}
- else if(z.name==='hoehle')add(3,[CF]);else if(z.name==='wal'){let ji=0;add(3,[CF],q=>{if(ji++===0){q.nm='Jonas';q.jb='Wohnt hier. Seit Kurzem. Oder seit der Bibel.';}});}else if(z.name==='maerchen')add(3,[GR,SW]);else if(z.name==='rhein')add(5,[GR]);else if(z.name==='amsterdam')add(10,[SW],q=>{if(chance(.5))q.col='#ff7a1a';});
+ else if(z.name==='hoehle')add(3,[CF]);else if(z.name==='wal'){let ji=0;add(3,[CF],q=>{if(ji++===0){q.nm='Jonas';q.jb='Wohnt hier. Seit Kurzem. Oder seit der Bibel.';}});}else if(z.name==='maerchen')add(3,[GR,SW]);else if(z.name==='schlaraff')add(4,[GR]);else if(z.name==='rhein')add(5,[GR]);else if(z.name==='amsterdam')add(10,[SW],q=>{if(chance(.5))q.col='#ff7a1a';});
  return out;
 }
 function zoneUpdate(dt){
@@ -1316,7 +1316,13 @@ function drawBuilding(c,b){
    c.fillStyle='rgba(255,255,255,.25)';c.fillRect(x+6,y+6,w-12,10);
   }else if(b.k==='barn'){
    c.strokeStyle='#f1e6d0';c.lineWidth=3;c.beginPath();c.moveTo(x+6,y+6);c.lineTo(x+w-6,y+h-hh-6);c.moveTo(x+w-6,y+6);c.lineTo(x+6,y+h-hh-6);c.stroke();c.lineWidth=1;
-   }else if(b.k==='ginger'){
+   }else if(b.k==='pudding'){
+   const hh2=h-hh;
+   c.fillStyle='#f1c96a';c.beginPath();c.ellipse(x+w/2,y+hh2/2,w/2-4,hh2/2-3,0,0,6.283);c.fill();
+   c.fillStyle='#7a3f14';c.beginPath();c.moveTo(x+8,y+hh2*.45);for(let i=0;i<=w-16;i+=16)c.quadraticCurveTo(x+8+i+8,y+hh2*.45+10+((i>>4)%3)*10,x+8+i+16,y+hh2*.45);c.lineTo(x+w-8,y+10);c.lineTo(x+8,y+10);c.closePath();c.fill();
+   c.fillStyle='rgba(255,255,255,.35)';c.fillRect(x+24,y+14,36,5);
+   c.fillStyle='#d8352f';c.beginPath();c.arc(x+w/2,y+14,11,0,6.283);c.fill();c.fillStyle='rgba(255,255,255,.6)';c.fillRect(x+w/2-5,y+8,4,4);c.strokeStyle='#3a6a2a';c.lineWidth=2;c.beginPath();c.moveTo(x+w/2,y+4);c.lineTo(x+w/2+6,y-3);c.stroke();c.lineWidth=1;
+  }else if(b.k==='ginger'){
     const hh2=h-hh;
     c.fillStyle='#8a4f24';for(let i=0;i<w-4;i+=16)for(let j=0;j<hh2-4;j+=16)if(((i+j)>>4)%2===0)c.fillRect(x+2+i,y+2+j,16,16);
     c.strokeStyle='#fff7e6';c.lineWidth=4;c.beginPath();c.moveTo(x+3,y+7);for(let i=0;i<w-6;i+=12)c.quadraticCurveTo(x+3+i+6,y+19,x+3+i+12,y+7);c.stroke();
@@ -1382,7 +1388,8 @@ const ZINFO={
  rhein:{title:'Rhein',hint:'Volle Fahrt! Immer flussabwärts, bis Amsterdam. Hoch fährt, Links und Rechts lenkt.',wx:'sun',gain:.35,base:GR,walk:[GR],picks:['stein','dose'],cap:8,swim:true},
  amsterdam:{title:'Amsterdam',hint:'Grachten, Fahrräder, Tulpen. Willkommen in Holland!',wx:'sun',gain:.3,base:SW,walk:[SW],picks:['stein','dose'],cap:10,swim:true},
  wal:{title:'Wal-Bauch',hint:'Warm, wabbelig und überraschend gemütlich. Sofa, Tee, Joint ...',wx:'none',gain:.6,base:CF,walk:[CF],picks:['dose'],cap:3,swim:true},
- maerchen:{title:'Märchenwald',hint:'Lebkuchenhaus, Frau Holle, sieben Zwerge ... Hier ist alles ein bisschen verzaubert.',wx:'none',gain:.5,base:GR,walk:[GR],picks:['dose','stein'],cap:6}
+ maerchen:{title:'Märchenwald',hint:'Lebkuchenhaus, Frau Holle, sieben Zwerge ... Hier ist alles ein bisschen verzaubert.',wx:'none',gain:.5,base:GR,walk:[GR],picks:['dose','stein'],cap:6},
+ schlaraff:{title:'Schlaraffenland',hint:'Pudding-Berge, ein Milchsee und Brathähnchen im Anflug. Mund auf!',wx:'none',gain:.6,base:GR,walk:[GR],picks:['dose'],cap:3}
 };
 const ZPO={
  strand:{home:['strandkorb','Strandkorb','Strandkorb zuklappen','Du kuschelst dich in den Strandkorb und klappst ihn zu. Wenn du ihn öffnest: zu Hause.'],wild:['surfbrett','Surfbrett','Aufs Surfbrett steigen','Eine Riesenwelle! Du surfst direkt aus dem Bild.']},
@@ -1392,10 +1399,11 @@ const ZPO={
  rhein:{home:['anleger','Anleger Düsseldorf','Zurück nach Düsseldorf','Du legst am Düsseldorfer Rheinufer an. Alles noch da.'],wild:['anleger','Anleger Amsterdam','Weiterfahren nach Amsterdam','Immer der Strömung nach. Moment, das sind schon Grachten!','amsterdam']},
  amsterdam:{home:['anleger','Boot nach Düsseldorf','Boot zurück nehmen','Du tuckerst den Rhein hinauf. Düsseldorf, hier bin ich wieder.'],wild:['tulpe','Riesen-Tulpe','In die Tulpe klettern','Du kletterst in die Riesen-Tulpe. Es riecht nach Frühling, dann nach Neuland.']},
  wal:{home:['blasloch','Blasloch','Durchs Blasloch hinaus','Der Wal niest kräftig. Du fliegst in hohem Bogen hinaus ins Meer!','strand'],wild:['tee','Leuchtender Tee','Den Leuchttee probieren','Ein seltsam leuchtender Tee. Du trinkst, und die Welt dreht sich weiter.']},
- maerchen:{home:['buch','Märchenbuch','Märchenbuch zuklappen','Ende gut, alles gut. Du klappst das Märchenbuch zu, und Rheinhafen ist wieder da.'],wild:['brunnen','Brunnen','In den Brunnen springen','Du springst in den Brunnen. Plumps! Du fällst und fällst, und unten ist es überraschend hell.']}
+ maerchen:{home:['buch','Märchenbuch','Märchenbuch zuklappen','Ende gut, alles gut. Du klappst das Märchenbuch zu, und Rheinhafen ist wieder da.'],wild:['brunnen','Brunnen','In den Brunnen springen','Du springst in den Brunnen. Plumps! Du fällst und fällst, und unten ist es überraschend hell.']},
+ schlaraff:{home:['loeffel','Riesenlöffel','Löffel zurück nehmen','Du setzt dich auf den Riesenlöffel und rutschst zurück in den Märchenwald.','maerchen'],wild:['kuchen','Zuckerkuchen','In den Kuchen beißen','Du beißt in den Kuchen. Die Füllung trägt dich fort.']}
 };
-const ZWILD={strand:[42,23],vulkan:[43,25],berge:[42,8],hoehle:[39,21],rhein:[44,rheinY(44)+7],amsterdam:[43,16],wal:[40,15],maerchen:[38,23]};
-const ZHOME={rhein:[3,rheinY(3)+7],amsterdam:[6,26],wal:[8,15],maerchen:[6,24]};
+const ZWILD={strand:[42,23],vulkan:[43,25],berge:[42,8],hoehle:[39,21],rhein:[44,rheinY(44)+7],amsterdam:[43,16],wal:[40,15],maerchen:[38,23],schlaraff:[40,22]};
+const ZHOME={rhein:[3,rheinY(3)+7],amsterdam:[6,26],wal:[8,15],maerchen:[6,24],schlaraff:[6,24]};
 function genZone(name){
  const I=ZINFO[name];
  const z={name:name,title:I.title,hint:I.hint,wx:I.wx,moodGain:I.gain,base:I.base,walk:I.walk,pickTypes:I.picks,pickCap:I.cap,dark:name==='hoehle',T:new Uint8Array(ZW*ZH),MW:ZW,MH:ZH,BLD:[],MKS:[],glows:[],WC:document.createElement('canvas'),MM:document.createElement('canvas'),spawn:null,swim:!!I.swim,rides:[],nogo:null,spawnRide:false};
@@ -1511,9 +1519,20 @@ function genZone(name){
   zf(28,6,6,4,BL);z.BLD.push({x:28,y:6,w:6,h:4,c:'#a8642e',n:'LEBKUCHENHAUS',k:'ginger',hh:6});
   zf(28,10,5,2,GR);zf(30,10,1,2,SW);zf(32,10,3,2,GR);
   {const m=mk('haus','sk',30,10,'Lebkuchenhaus','Lebkuchenhaus und liebe Hexe');m.sk='haus';m.col='#ffb347';}
+  zf(11,25,25,3,GR);
+  {const m=mk('hase','sk',12,26,'Hase und Igel','Wettlauf Hase und Igel');m.sk='hase';m.col='#ffb347';}
+  zf(42,21,3,3,GR);
+  {const m=mk('schl','portal',43,22,'Schlaraffenland','Ins Schlaraffenland gehen','kuchen','Du isst dich durch einen Berg aus Griesbrei. Dahinter: Schlaraffenland!');m.to='schlaraff';}
+  zf(17,9,5,4,GR);
+  {const m=mk('tisch','sk',19,12,'Tischlein deck dich','Tischlein deck dich ausprobieren');m.sk='tisch';m.col='#ffb347';}
   zf(38,15,4,3,BL);z.BLD.push({x:38,y:15,w:4,h:3,c:'#8a6a9a',n:'ZWERGENSTUBE',k:'house',hh:6});
   zf(39,18,1,1,GR);
   mk('zstube','buedchen',39,18,'Zwergenstube','Zwergenstube besuchen');
+ }else if(name==='schlaraff'){
+  for(let y=0;y<ZH;y++)for(let x=0;x<ZW;x++){const e=x<2||y<2||x>ZW-3||y>ZH-3;if(e&&r()<.75)zs(x,y,TR);else if(r()<.04)zs(x,y,TR);}
+  zc(32,19,6.5,4,SH);
+  zf(9,4,9,7,GR);zf(10,5,8,5,BL);z.BLD.push({x:10,y:5,w:8,h:5,c:'#e8b64a',n:'PUDDINGBERG',k:'pudding',hh:6});
+  {const m=mk('pudding','sk',14,10,'Puddingberg','Puddingberg besuchen');m.sk='pudding';m.col='#ffb347';}
  }
  const po=ZPO[name],HP=ZHOME[name]||[6,25],hx=HP[0],hy=HP[1],wx=ZWILD[name][0],wy=ZWILD[name][1];
  clr(hx,hy,2,base);clr(wx,wy,1,base);
@@ -1531,12 +1550,12 @@ function genZone(name){
 function zoneTile(c,t,px,py,h,nm,x,y,g){
  if(t===SA){c.fillStyle=h<3?'#e8d49c':h<6?'#e2cd92':'#dcc688';c.fillRect(px,py,TS,TS);if(h===1){c.fillStyle='rgba(120,90,40,.25)';c.fillRect(px+8,py+10,3,2);}}
  else if(t===SH||t===DP){
-  const deep=t===DP;c.fillStyle=deep?'#2c80b4':'#5ec0d6';if(nm==='hoehle')c.fillStyle=deep?'#173653':'#25506f';if(nm==='wal')c.fillStyle=deep?'#2a8fa8':'#6cc6c6';c.fillRect(px,py,TS,TS);
+  const deep=t===DP;c.fillStyle=deep?'#2c80b4':'#5ec0d6';if(nm==='hoehle')c.fillStyle=deep?'#173653':'#25506f';if(nm==='wal')c.fillStyle=deep?'#2a8fa8':'#6cc6c6';if(nm==='schlaraff')c.fillStyle='#f3efe6';c.fillRect(px,py,TS,TS);
   if(h<3){c.fillStyle='rgba(255,255,255,.18)';c.fillRect(px+4+h*3,py+8+h*3,12,2);}
   if(!deep&&nm==='strand'&&g(x,y+1)===SA){c.fillStyle='rgba(255,255,255,.7)';c.fillRect(px,py+TS-4,TS,3);}
  }
 
- else if(t===GR&&nm==='maerchen'){c.fillStyle=h<3?'#7cbf5c':h<6?'#74b755':'#82c563';c.fillRect(px,py,TS,TS);if(h===1){c.fillStyle='#fff';c.fillRect(px+7,py+9,3,3);c.fillStyle='#f4d03f';c.fillRect(px+8,py+10,1,1);}else if(h===3){c.fillStyle='#ff7fb0';c.fillRect(px+19,py+17,3,3);c.fillStyle='#fff3a0';c.fillRect(px+20,py+18,1,1);}else if(h===5){c.fillStyle='#b58cff';c.fillRect(px+12,py+22,3,3);}else if(h===2){c.fillStyle='rgba(255,255,255,.25)';c.fillRect(px+6,py+14,8,2);}}
+ else if(t===GR&&(nm==='maerchen'||nm==='schlaraff')){c.fillStyle=h<3?'#7cbf5c':h<6?'#74b755':'#82c563';c.fillRect(px,py,TS,TS);if(h===1){c.fillStyle='#fff';c.fillRect(px+7,py+9,3,3);c.fillStyle='#f4d03f';c.fillRect(px+8,py+10,1,1);}else if(h===3){c.fillStyle='#ff7fb0';c.fillRect(px+19,py+17,3,3);c.fillStyle='#fff3a0';c.fillRect(px+20,py+18,1,1);}else if(h===5){c.fillStyle='#b58cff';c.fillRect(px+12,py+22,3,3);}else if(h===2){c.fillStyle='rgba(255,255,255,.25)';c.fillRect(px+6,py+14,8,2);}}
  else if(t===GR){c.fillStyle=h<3?'#6fae56':h<6?'#68a64f':'#74b45c';c.fillRect(px,py,TS,TS);if(h===2){c.fillStyle='rgba(255,255,255,.35)';c.fillRect(px+8,py+10,2,2);c.fillStyle='#f4d03f';c.fillRect(px+20,py+18,2,2);}}
  else if(t===SW){c.fillStyle=h<4?'#b9a58f':'#b09b84';c.fillRect(px,py,TS,TS);c.fillStyle='rgba(90,60,40,.28)';c.fillRect(px,py+15,TS,1);c.fillRect(px+((y&1)?8:20),py,1,15);c.fillRect(px+((y&1)?20:8),py+16,1,16);}
  else if(t===DK){c.fillStyle='#a67c3a';c.fillRect(px,py,TS,TS);c.fillStyle='rgba(60,35,10,.4)';for(let k=0;k<4;k++)c.fillRect(px,py+k*8+7,TS,1);}
@@ -1573,8 +1592,8 @@ function renderZone(z){
     c.strokeStyle='#2f9a3f';c.lineWidth=3;
     for(let k=0;k<6;k++){const a=k/6*6.283;c.beginPath();c.moveTo(px+2,py-2);c.lineTo(px+2+Math.cos(a)*14,py-2+Math.sin(a)*10);c.stroke();}
     c.fillStyle='#6b4a1f';c.beginPath();c.arc(px+1,py-1,2.5,0,6.283);c.fill();c.lineWidth=1;
-   }else if(nm==='maerchen'){
-    const hv=hash(x,y)%4,cc=[['#2f7a3f','#3f9a4f'],['#357f5a','#46a374'],['#4f8a2f','#6aae3f'],['#a8527a','#d4709f']][hv];
+   }else if(nm==='maerchen'||nm==='schlaraff'){
+    const hv=hash(x,y)%4,cc=(nm==='schlaraff'?[['#ff9ec7','#ffc2dc'],['#9ed8ff','#c4e8ff'],['#ffe08a','#fff0b8'],['#b9f0c0','#d8f8dc']]:[['#2f7a3f','#3f9a4f'],['#357f5a','#46a374'],['#4f8a2f','#6aae3f'],['#a8527a','#d4709f']])[hv];
     c.fillStyle='#5a3d22';c.fillRect(px-3,py+1,6,11);c.fillStyle='#2b1a0e';c.beginPath();c.ellipse(px,py+7,1.8,2.6,0,0,6.283);c.fill();
     c.fillStyle=cc[0];c.beginPath();c.arc(px,py-5,14,0,6.283);c.fill();c.fillStyle=cc[1];c.beginPath();c.arc(px-4,py-9,8,0,6.283);c.fill();c.beginPath();c.arc(px+6,py-4,6,0,6.283);c.fill();
     c.fillStyle='rgba(255,255,255,.45)';c.fillRect(px-6,py-10,2,2);c.fillRect(px+4,py-8,2,2);
@@ -1633,7 +1652,8 @@ function renderZone(z){
   if(nm==='wal'&&t===CF)mc.fillStyle='#d98aa0';
   if(nm==='wal'&&t===RK)mc.fillStyle='#7a2a45';
   if(nm==='wal'&&t===LC)mc.fillStyle='#8a5fb3';
-  if(nm==='maerchen'&&t===GR)mc.fillStyle='#7cbf5c';
+  if((nm==='maerchen'||nm==='schlaraff')&&t===GR)mc.fillStyle='#7cbf5c';
+  if(nm==='schlaraff'&&t===SH)mc.fillStyle='#f3efe6';
   mc.fillRect(x*S,y*S,S,S);
  }
 }
@@ -1711,6 +1731,8 @@ function drawPortalObj(m,t){
  else if(o==='schlitten'){ctx.fillRect(x-9,y-8,22,18);ctx.fillStyle='#b5651d';ctx.fillRect(x-10,y-10,20,14);ctx.fillStyle='#e5604d';ctx.fillRect(x-8,y-8,16,4);ctx.strokeStyle='#777';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-12,y+7);ctx.lineTo(x+12,y+7);ctx.moveTo(x-12,y+7);ctx.quadraticCurveTo(x-16,y+4,x-13,y+1);ctx.stroke();ctx.lineWidth=1;}
  else if(o==='anleger'||o==='schiff'){ctx.fillStyle='#8a6a3a';ctx.fillRect(x-13,y-6,26,14);ctx.fillStyle='#a67c3a';ctx.fillRect(x-13,y-6,26,3);ctx.fillRect(x-13,y,26,3);ctx.fillStyle='#e8e2d0';ctx.beginPath();ctx.moveTo(x-9,y-6);ctx.lineTo(x+9,y-6);ctx.lineTo(x+13,y-14);ctx.lineTo(x-13,y-14);ctx.closePath();ctx.fill();ctx.fillStyle='#2e86c1';ctx.fillRect(x-11,y-13,22,3);ctx.fillStyle='#e5604d';ctx.fillRect(x-2,y-22,4,8);}
  else if(o==='tulpe'){ctx.fillStyle='#2f9a3f';ctx.fillRect(x-1.5,y,3,14);ctx.beginPath();ctx.ellipse(x-6,y+8,6,2.5,-.6,0,6.283);ctx.fill();ctx.fillStyle='#e5504d';ctx.beginPath();ctx.moveTo(x-9,y-4);ctx.quadraticCurveTo(x-10,y+6,x,y+8);ctx.quadraticCurveTo(x+10,y+6,x+9,y-4);ctx.lineTo(x+4,y-1);ctx.lineTo(x,y-9);ctx.lineTo(x-4,y-1);ctx.closePath();ctx.fill();ctx.fillStyle='#ff9a3c';ctx.fillRect(x-2,y-3,4,8);}
+  else if(o==='kuchen'){ctx.fillRect(x-12,y-6,26,20);ctx.fillStyle='#e8b64a';ctx.fillRect(x-13,y-2,26,14);ctx.fillStyle='#fff7e6';ctx.fillRect(x-13,y-8,26,7);ctx.fillStyle='#e5504d';circle(x,y-11,3.4);ctx.fillStyle='#7a3f14';ctx.fillRect(x-13,y+8,26,4);}
+  else if(o==='loeffel'){ctx.strokeStyle='#9aa0a8';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x-12,y+12);ctx.lineTo(x+4,y-6);ctx.stroke();ctx.lineWidth=1;ctx.fillStyle='#b8bec6';ctx.beginPath();ctx.ellipse(x+8,y-10,9,7,.7,0,6.283);ctx.fill();ctx.fillStyle='#f1c96a';ctx.beginPath();ctx.ellipse(x+8,y-10,6.5,4.6,.7,0,6.283);ctx.fill();}
   else if(o==='buch'){ctx.fillRect(x-12,y-9,26,22);ctx.fillStyle='#7a3b2a';ctx.fillRect(x-13,y-11,26,22);ctx.fillStyle='#f4ead0';ctx.fillRect(x-11,y-9,10,18);ctx.fillRect(x+1,y-9,10,18);ctx.fillStyle='#c9b98d';for(let k=0;k<4;k++){ctx.fillRect(x-9,y-6+k*4,6,1);ctx.fillRect(x+3,y-6+k*4,6,1);}ctx.fillStyle='#ffd23f';circle(x,y-14-Math.abs(Math.sin(t*3))*3,2.2);}
  else if(o==='brunnen'){ctx.beginPath();ctx.ellipse(x+2,y+4,15,12,0,0,6.283);ctx.fill();ctx.fillStyle='#9aa0a8';circle(x,y,14);ctx.fillStyle='#7d838c';circle(x,y,11);ctx.fillStyle='#2c80b4';circle(x,y,8.5);ctx.fillStyle='rgba(255,255,255,.4)';ctx.fillRect(x-5,y-3,6,2);ctx.strokeStyle='#5a3a1f';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-12,y-14);ctx.lineTo(x-12,y+2);ctx.moveTo(x+12,y-14);ctx.lineTo(x+12,y+2);ctx.moveTo(x-13,y-14);ctx.lineTo(x+13,y-14);ctx.stroke();ctx.lineWidth=1;}
  else if(o==='leiter'){ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(x,y,13,10,0,0,6.283);ctx.fill();ctx.strokeStyle='#a67c2e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-5,y-9);ctx.lineTo(x-5,y+9);ctx.moveTo(x+5,y-9);ctx.lineTo(x+5,y+9);for(let k=-6;k<=6;k+=4){ctx.moveTo(x-5,y+k);ctx.lineTo(x+5,y+k);}ctx.stroke();ctx.lineWidth=1;}
@@ -2279,7 +2301,7 @@ function extUpdate(dt){
   P.ride.sp=0;
   startFade('Ein Schild am Ufer: "Welkom in Nederland!" Du fährst direkt in die Amsterdamer Grachten. Das ging fix.',()=>enterZone('amsterdam'));
  }
- ext6Update(dt);ext7Update(dt);
+ ext6Update(dt);ext7Update(dt);ext8Update(dt);ext9Update(dt);
 }
 function drawCastle(c){
  ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(c.x+3,c.y+7,17,7,0,0,6.283);ctx.fill();
@@ -2774,9 +2796,14 @@ function skEnter(z){
   z.ska.push({k:'hexe',x:33.6*TS,y:10.9*TS,a:0,cd:0});
   z.ska.push({k:'holle',x:10.4*TS,y:8.9*TS,a:0,cd:0,fe:0});
   const mu=mkMusik(21*TS,12*TS);mu.life=1e9;z.ska.push(mu);
+  z.ska.push({k:'hase',x:13*TS+16,y:26*TS+12,st:'idle',dir:1,round:0,t:0,walk:0,bet:null,cd:0});
+  z.ska.push({k:'ig',e:0,x:13*TS+16,y:26*TS+30,show:0});z.ska.push({k:'ig',e:1,x:33*TS+16,y:26*TS+30,show:0});
+  {const f1=freeSpot(16*TS,15*TS),f2=freeSpot(13*TS,18*TS);z.ska.push({k:'kap',x:f1.x,y:f1.y,a:0,walk:0,steer:2,cd:0,pause:0});z.ska.push({k:'wolf',x:f2.x,y:f2.y,a:0,walk:0,steer:2,cd:0,st:'lurk',t:rf(14,22),zz:0,hop:0});}
   const cx0=28*TS,cy0=6*TS,cc=['#e5504d','#2e86c1','#f1c40f','#27ae60','#d35bb5','#ff9a3c'];
   z.candy=[[22,20],[62,14],[100,24],[140,14],[170,22],[30,56],[80,46],[118,52],[160,60],[98,86]].map((s,i)=>({x:cx0+s[0],y:cy0+s[1],c:cc[i%6],on:true,t:0}));
   z.wx0='none';z.hcd=0;z.tcd=0;
+ }else if(z.name==='schlaraff'){
+  z.ska=[[16,14],[28,10],[30,24],[22,20]].map((q,i)=>({k:'huhn',x:q[0]*TS,y:q[1]*TS,a:i*1.6,steer:rf(1,3),walk:i,cd:0}));
  }else if(z.name==='berge'){
   z.ska=[];
   z.ska.push({k:'wm',x:9.5*TS,y:17.6*TS,a:0,cd:0,ho:6});
@@ -2789,6 +2816,7 @@ function nearSk(){
  if(P.inCar||P.sit||P.ride||P.build||P.fish||P.fight)return null;
  let b=null,bd=99;
  skl().forEach(d=>{
+  if(d.k==='ig')return;
   const r=d.k==='gr'?46:d.k==='mu'?40:34,dd=Math.hypot(d.x-P.x,d.y-P.y)-(r-34);
   if(dd<34&&dd<bd){bd=dd;b=d;}
  });
@@ -2800,6 +2828,10 @@ function skPrompt(d){
  if(d.k==='holle')return 'OK: Frau Holle helfen';
  if(d.k==='wm')return 'OK: Weihnachtsmann ansprechen';
  if(d.k==='gr')return 'OK: Berg-Griesgram ansprechen';
+ if(d.k==='kap')return 'OK: Rotkäppchen ansprechen';
+ if(d.k==='hase')return 'OK: Hasen ansprechen';
+ if(d.k==='huhn')return 'OK: Brathähnchen schnappen';
+ if(d.k==='wolf')return d.st==='sleep'?'OK: Schlafenden Wolf ansehen':'OK: Wolf ansprechen';
  return 'OK: Zugabe fordern';
 }
 function startSk(k,dur,msg){
@@ -2813,6 +2845,9 @@ function skMarker(mk){
  if(k==='haus')hexeMenu();
  else if(k==='holle')holleMenu();
  else if(k==='werk')werkMenu();
+ else if(k==='tisch')tischMenu();
+ else if(k==='hase')hasenMenu();
+ else if(k==='pudding')puddingMenu();
 }
 function skOpen(d){
  if(d.k==='zw'){
@@ -2824,6 +2859,10 @@ function skOpen(d){
  else if(d.k==='holle')holleMenu();
  else if(d.k==='wm')werkMenu();
  else if(d.k==='gr')griesMenu(d);
+ else if(d.k==='kap')kapMenu();
+ else if(d.k==='wolf')wolfMenu();
+ else if(d.k==='hase')hasenMenu();
+ else if(d.k==='huhn')huhnFang(d);
  else if(d.k==='mu'){
   if(d.cd>0){toast('Die Stadtmusikanten holen kurz Luft.');return;}
   d.cd=12;d.play=5;mood(6,'+6 Zugabe');sfx('musik');
@@ -2861,6 +2900,7 @@ function skAct(p){
   return;
  }
  closeModal();
+ if(skAct2(p)||skAct3(p))return;
  if(p==='knab'){
   const c=z&&z.candy?z.candy.filter(q=>q.on):[];
   if(!c.length){toast('Das Haus ist kahl gefuttert. Die Hexe schnippt, und alles ist wieder da.');if(z&&z.candy)z.candy.forEach(q=>{q.on=true;});mood(5,'+5');sfx('magic');return;}
@@ -3115,6 +3155,8 @@ function drawSketch(cx,cy){
  const iv=(x,y,m)=>x>cx-m&&x<cx+VW+m&&y>cy-m&&y<cy+VH+m;
  if(ZONE){
   if(ZONE.candy)ZONE.candy.forEach(c=>{if(c.on&&iv(c.x,c.y,10))drawCandy(c);});
+  if(ZONE.name==='maerchen'&&iv(19*TS,11*TS,60))drawTisch();
+  if(ZONE.name==='maerchen'&&iv(23*TS,26*TS,520))drawAcker();
   if(ZONE.name==='berge'&&iv(12.5*TS,18*TS,120))drawSleigh(12.5*TS,18.3*TS);
  }
  skl().forEach(d=>{
@@ -3125,7 +3167,280 @@ function drawSketch(cx,cy){
   else if(d.k==='wm')drawWm(d);
   else if(d.k==='gr')drawGries(d);
   else if(d.k==='mu')drawMusik(d);
+  else if(d.k==='kap')drawKap(d);
+  else if(d.k==='wolf')drawWolf(d);
+  else if(d.k==='hase')drawHase(d);
+  else if(d.k==='ig')drawIgel(d);
+  else if(d.k==='huhn')drawHuhn(d);
  });
+}
+
+const GESCHENKE=['Ein Gutschein für einen Mittagsschlaf. Einlösbar jederzeit.','Ein Paar Socken mit eingebautem Rückenwind.','Eine Tafel Schokolade, die nie ganz alle wird.','Ein Buch, das sich selbst vorliest.','Ein Regenschirm, der nur über dir regnet, wenn du es willst.','Ein Kuschelkissen mit Gute-Laune-Garantie.','Ein Kuchenstück, noch warm. Obwohl es im Karton war.','Ein Jahresabo für Sonnenuntergänge.'];
+function tischMenu(){
+ const z=ZONE,f=z&&z.feast>0;
+ mdl('Tischlein deck dich','Ein schlichter Holztisch mitten im Wald. Auf einem Schildchen steht: "Sag es einfach laut."',[
+  ['Tischlein, deck dich!','tdeck',f],['Geschenke auspacken ('+(z&&z.gifts>0?z.gifts:0)+')','tgift',!(f&&z.gifts>0)]]);
+}
+function kapMenu(){
+ mdl('Rotkäppchen','"Ich bringe der Großmutter Kuchen. Aber da hinten im Gebüsch sitzt ein Wolf, der immer so unschuldig pfeift."',[
+  ['Kuchen probieren','kuchen'],['Wolf im Auge behalten','warn']]);
+}
+function wolfMenu(){
+ const w=skl().find(d=>d.k==='wolf');
+ if(w&&w.zz>0){toast('Der Wolf schläft tief. Zzz ... Kuchen ... zzz ...');return;}
+ const n=G.lk||0;
+ showModal({title:'Der Wolf',text:'Der Wolf pfeift unschuldig und guckt in den Himmel. "Ich? Ich wollte doch nur ein Stück Kuchen. Hab seit Tagen nichts gehabt. Außer Kuchen."',choices:[{label:'Lebkuchen anbieten ('+n+')',a:'skA',p:'wlk',off:n<1},{label:'Hinterm Ohr kraulen',a:'skA',p:'wkr'},{label:'Weitergehen',a:'mclose'}]});
+}
+function skAct2(p){
+ const z=ZONE;
+ if(p==='tdeck'){
+  if(z.feast>0)return true;
+  z.feast=30;z.gifts=3;
+  sfx('magic');mood(8,'+8 Festmahl');
+  skl().forEach(q=>{if(q.k==='zw')q.dn=6;});
+  const w=skl().find(d=>d.k==='wolf');if(w){w.zz=Math.max(w.zz||0,20);w.st='sleep';}
+  toast('"Tischlein, deck dich!" Und wirklich: Kuchen, Brot, Saft und drei Geschenke. Sogar der Wolf kommt friedlich satt ins Nickerchen.');
+  return true;
+ }
+ if(p==='tgift'){
+  if(!(z.feast>0&&z.gifts>0))return true;
+  z.gifts--;sfx('coin');mood(6,'+6 Geschenk');
+  if(chance(.5)){G.cash+=10;}
+  toast('Du packst aus: '+pick(GESCHENKE));
+  return true;
+ }
+ if(p==='kuchen'){mood(4,'+4 Kuchen');sfx('crunch');toast('Rotkäppchens Kuchen: Mürbeteig, Kirschen, Liebe. Du bekommst ein halbes Stück und ein Lächeln.');return true;}
+ if(p==='warn'){
+  const w=skl().find(d=>d.k==='wolf');if(w&&w.st==='sneak'){w.st='lurk';w.t=18;}
+  mood(2,'+2');sfx('clap');toast('Du schaust dem Gebüsch streng in die Augen. Es raschelt verlegen.');return true;
+ }
+ if(p==='wlk'){
+  const w=skl().find(d=>d.k==='wolf'),k=skl().find(d=>d.k==='kap');
+  if(!w||(G.lk||0)<1)return true;
+  G.lk--;w.zz=45;w.st='sleep';G.cash+=15;
+  mood(9,'+9 Wolf besänftigt');sfx('coin');
+  toast('Der Wolf verschlingt den Lebkuchen, seufzt und rollt sich zusammen. Rotkäppchen steckt dir 15 € Finderlohn zu. Zzz ...');
+  return true;
+ }
+ if(p==='wkr'){
+  const w=skl().find(d=>d.k==='wolf');if(w)w.hop=.9;
+  mood(4,'+4 Wolf kraulen');sfx('aww');toast(pick(['Der Wolf wedelt wie ein großer Hund. Er würde das niemals zugeben.','Sein Hinterbein zuckt. Das ist wohl die Lieblingsstelle.']));
+  return true;
+ }
+ return false;
+}
+function leash(d,hx,hy,r){
+ if(Math.hypot(d.x-hx,d.y-hy)>r){d.a=Math.atan2(hy-d.y,hx-d.x);d.steer=2;}
+}
+function ext8Update(dt){
+ if(!G||!ZONE||ZONE.name!=='maerchen')return;
+ const z=ZONE,L=skl();
+ if(z.feast>0){
+  z.feast-=dt;
+  if(z.feast<=0)z.gifts=0;
+  if(chance(dt*7))FX.push({x:19*TS+16+rf(-22,22),y:11*TS+rf(-6,14),vx:rf(-8,8),vy:rf(-30,-10),g:0,t:0,life:1.2,dot:pick(['#ffd23f','#fff','#ffb3f0']),r:rf(1.4,2.6)});
+ }
+ const k=L.find(d=>d.k==='kap'),w=L.find(d=>d.k==='wolf');
+ if(k){
+  if(k.pause>0)k.pause-=dt;
+  else{leash(k,16*TS,15*TS,260);steerStep(k,dt,24);}
+ }
+ if(w&&k){
+  if(w.zz>0){w.zz-=dt;w.st='sleep';if(chance(dt*.8))addFx(w.x+6,w.y-16,'Z','#cfd6e0',1.6);if(w.zz<=0){w.st='lurk';w.t=rf(16,28);addFx(w.x,w.y-20,'Gähn ... Kuchen?','#cfd6e0',1.6);}return;}
+  const dk=Math.hypot(k.x-w.x,k.y-w.y);
+  if(w.st==='lurk'){
+   leash(w,14*TS,18*TS,300);steerStep(w,dt,22);
+   w.t-=dt;if(w.t<=0)w.st='sneak';
+  }else if(w.st==='sneak'){
+   const dp=Math.hypot(P.x-w.x,P.y-w.y);
+   if(dp<46){w.st='lurk';w.t=rf(14,22);addFx(w.x,w.y-20,'Ich tu nix!','#ffe08a',1.4);return;}
+   w.a=Math.atan2(k.y-w.y,k.x-w.x);
+   if(dk>18){const nx=w.x+Math.cos(w.a)*40*dt,ny=w.y+Math.sin(w.a)*40*dt;if(skOk(nx,ny)){w.x=nx;w.y=ny;w.walk+=dt*8;}else if(skOk(nx,w.y))w.x=nx;else if(skOk(w.x,ny))w.y=ny;}
+   else{
+    w.st='run';w.t=5;k.pause=2.5;sfx('pfft');
+    addFx(w.x,w.y-22,'Nasch!','#ffd23f',1.3);addFx(k.x,k.y-30,'Hey, mein Kuchen!','#ff9a9a',1.8);
+    if(Math.hypot(P.x-k.x,P.y-k.y)<420)toast('Der Wolf klaut Rotkäppchen ein Stück Kuchen und flitzt davon. Niemand wird gefressen, nur genascht.');
+   }
+  }else if(w.st==='run'){
+   w.t-=dt;w.a=Math.atan2(w.y-k.y,w.x-k.x);
+   const nx=w.x+Math.cos(w.a)*70*dt,ny=w.y+Math.sin(w.a)*70*dt;
+   if(skOk(nx,ny)){w.x=nx;w.y=ny;w.walk+=dt*12;}else w.a+=1.5;
+   if(w.t<=0){w.st='lurk';w.t=rf(18,30);}
+  }
+ }
+}
+function drawKap(d){
+ const x=d.x,y=d.y;
+ ctx.fillStyle='rgba(0,0,0,.28)';ctx.beginPath();ctx.ellipse(x+2,y+3,9,4,0,0,6.283);ctx.fill();
+ ctx.fillStyle='#d8352f';ctx.beginPath();ctx.moveTo(x-9,y);ctx.lineTo(x+9,y);ctx.lineTo(x+5,y-14);ctx.lineTo(x-5,y-14);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#f4ead0';ctx.fillRect(x-3,y-13,6,5);
+ ctx.fillStyle='#e8c39e';circle(x,y-18,4.6);
+ ctx.fillStyle='#d8352f';ctx.beginPath();ctx.arc(x,y-19,6,Math.PI,0);ctx.fill();ctx.fillRect(x-6,y-19,12,3);
+ ctx.fillStyle='#222';ctx.fillRect(x-2.4,y-18,1.4,1.6);ctx.fillRect(x+1,y-18,1.4,1.6);
+ ctx.strokeStyle='#a03a3a';ctx.beginPath();ctx.arc(x,y-16,1.8,.2,2.9);ctx.stroke();
+ ctx.fillStyle='#9a6a3a';ctx.fillRect(x+7,y-8,10,8);ctx.fillStyle='#fff';ctx.fillRect(x+8,y-10,8,3);ctx.fillStyle='#e5504d';ctx.fillRect(x+9,y-10,2,3);ctx.fillRect(x+13,y-10,2,3);
+ ctx.strokeStyle='#7a5a2a';ctx.beginPath();ctx.arc(x+12,y-8,5,Math.PI,0);ctx.stroke();
+}
+function drawWolf(w){
+ const t=timeNow,x=w.x,y=w.y,sl=w.st==='sleep',hp=w.hop>0?Math.abs(Math.sin(w.hop*10))*5:0;
+ ctx.fillStyle='rgba(0,0,0,.28)';ctx.beginPath();ctx.ellipse(x+2,y+4,13,5,0,0,6.283);ctx.fill();
+ ctx.save();ctx.translate(x,y-hp);
+ const fl=Math.cos(w.a)<0?-1:1;ctx.scale(fl,1);
+ const lg=sl?0:Math.sin(w.walk)*2.4;
+ ctx.fillStyle='#6a6c73';ctx.fillRect(-9,sl?0:-1,3,sl?3:7+lg);ctx.fillRect(5,sl?0:-1,3,sl?3:7-lg);
+ ctx.strokeStyle='#7d7f86';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-12,-5);ctx.quadraticCurveTo(-20,sl?-2:-12+Math.sin(t*6)*3,-18,sl?4:-16);ctx.stroke();ctx.lineWidth=1;
+ ctx.fillStyle='#7d7f86';ctx.beginPath();ctx.ellipse(0,-5,13,sl?6:7.4,0,0,6.283);ctx.fill();
+ ctx.fillStyle='#c9ccd2';ctx.beginPath();ctx.ellipse(-1,-2,8,3.2,0,0,6.283);ctx.fill();
+ const hx=sl?10:12,hy=sl?-2:-11;
+ ctx.fillStyle='#7d7f86';circle(hx,hy,6);
+ ctx.beginPath();ctx.moveTo(hx-5,hy-3);ctx.lineTo(hx-3,hy-11);ctx.lineTo(hx,hy-4);ctx.fill();ctx.beginPath();ctx.moveTo(hx+1,hy-4);ctx.lineTo(hx+4,hy-11);ctx.lineTo(hx+6,hy-3);ctx.fill();
+ ctx.fillStyle='#c9ccd2';ctx.beginPath();ctx.ellipse(hx+6,hy+2,5,3.2,0,0,6.283);ctx.fill();
+ ctx.fillStyle='#222';circle(hx+10,hy+1,1.4);
+ if(sl){ctx.strokeStyle='#222';ctx.beginPath();ctx.moveTo(hx+1,hy-1);ctx.lineTo(hx+4,hy-1);ctx.stroke();}
+ else{ctx.fillStyle='#ffd23f';circle(hx+2,hy-2,1.6);ctx.fillStyle='#222';circle(hx+3,hy-2,.8);}
+ ctx.restore();
+}
+function drawTisch(){
+ const z=ZONE,x=19*TS+16,y=11*TS+20,f=z.feast>0;
+ ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(x+3,y+14,32,8,0,0,6.283);ctx.fill();
+ ctx.fillStyle='#6f4524';ctx.fillRect(x-24,y,5,14);ctx.fillRect(x+19,y,5,14);
+ ctx.fillStyle=f?'#fff':'#8a5a34';ctx.fillRect(x-28,y-8,56,12);
+ if(f){ctx.fillStyle='#e5504d';for(let i=0;i<7;i++)ctx.fillRect(x-28+i*8,y-8,4,12);ctx.fillStyle='rgba(255,255,255,.85)';for(let i=0;i<7;i++)ctx.fillRect(x-24+i*8,y-8,4,12);}
+ else{ctx.fillStyle='#a8723f';ctx.fillRect(x-28,y-8,56,3);}
+ if(f){
+  ctx.fillStyle='#d9a35a';ctx.beginPath();ctx.ellipse(x-18,y-12,8,5,0,0,6.283);ctx.fill();ctx.fillStyle='#b07a3a';ctx.fillRect(x-24,y-14,3,2);
+  ctx.fillStyle='#f4ead0';ctx.fillRect(x-8,y-17,13,9);ctx.fillStyle='#e5504d';ctx.fillRect(x-8,y-17,13,3);ctx.fillStyle='#ffd23f';ctx.fillRect(x-2,y-22,2,5);
+  ctx.fillStyle='#ff9a3c';ctx.beginPath();ctx.moveTo(x+10,y-8);ctx.lineTo(x+8,y-20);ctx.lineTo(x+18,y-20);ctx.lineTo(x+16,y-8);ctx.fill();
+  if(z.gifts>0)[[x+22,'#2e86c1'],[x+24,'#27ae60'],[x+20,'#d35bb5']].slice(0,z.gifts).forEach((q,i)=>{ctx.fillStyle=q[1];ctx.fillRect(q[0]-5,y-18-i*9,12,9);ctx.fillStyle='rgba(255,255,255,.85)';ctx.fillRect(q[0]+0,y-18-i*9,2,9);ctx.fillRect(q[0]-5,y-14-i*9,12,2);});
+ }
+}
+
+function hasenMenu(){
+ const h=skl().find(d=>d.k==='hase');
+ if(!h)return;
+ if(h.st!=='idle'){toast(h.st==='tired'?'Der Hase hechelt: "Noch eine Runde ... morgen. Vielleicht."':'Das Rennen läuft! Nicht blinzeln.');return;}
+ mdl('Hase und Igel','Der Hase lacht: "Ich bin der Schnellste im ganzen Wald! Wer wettet gegen mich?" Der Igel zuckt nur kurz mit den Stacheln.',[['Einfach zuschauen','hr0'],['Auf den Hasen wetten (2 €)','hrh',G.cash<2],['Auf den Igel wetten (2 €)','hri',G.cash<2]]);
+}
+function puddingMenu(){
+ mdl('Puddingberg','Ein Berg aus Vanillepudding, dick mit Karamell überzogen, oben thront eine Kirsche. Er wackelt leise vor sich hin.',[['Löffeln, bis es nicht mehr geht','pl'],['Auf dem Pudding hüpfen','ph'],['Schokosoße drübergießen','ps']]);
+}
+function huhnFang(d){
+ if(d.cd>0){toast('Das Hähnchen ist gerade außer Reichweite.');return;}
+ d.cd=8;
+ if(chance(.55)){mood(6,'+6 Hähnchen');sfx('crunch');toast(pick(['Knusprig, saftig, mitten im Flug gefangen. Du bedankst dich beim Hähnchen. Es winkt mit dem Flügel.','Ein Hähnchen fliegt dir direkt in die Hände. So macht Abendessen Spaß.']));}
+ else{addFx(d.x,d.y-30,'Flatter!','#ffe08a',1.2);d.a+=3.14;d.steer=2;toast('Entwischt! Das Hähnchen flattert lachend davon.');}
+}
+function startRace(bet){
+ const h=skl().find(d=>d.k==='hase');if(!h||h.st!=='idle')return;
+ if(bet){G.cash-=2;sfx('coin');}
+ h.bet=bet;h.st='run';h.dir=1;h.round=0;h.x=13*TS+16;
+ toast(bet==='hase'?'Du wettest auf den Hasen. Mutig.':bet==='igel'?'Du wettest auf den Igel. Klug.':'Auf die Plätze, fertig, los!');
+ sfx('arrive');
+}
+function skAct3(p){
+ if(p==='hr0'){startRace(null);return true;}
+ if(p==='hrh'){startRace('hase');return true;}
+ if(p==='hri'){startRace('igel');return true;}
+ if(p==='pl'){mood(4,'+4 Pudding');sfx('glug');toast(pick(['Löffel für Löffel. Der Berg schrumpft nicht, er lächelt nur.','Vanille, Karamell, Kirschensaft: Du bist im Himmel mit Löffel.']));return true;}
+ if(p==='ph'){mood(6,'+6 Hüpfen');sfx('bonk');shake=.3;addFx(P.x,P.y-20,'Wackel!','#ffd23f',1.2);toast('Boing! Der Pudding federt dich zurück in die Luft. Du landest wackelnd, aber glücklich.');return true;}
+ if(p==='ps'){mood(3,'+3 Schoko');sfx('pat');toast('Schokosoße läuft den Berg hinab. Der Berg freut sich sichtlich.');return true;}
+ return false;
+}
+function ext9Update(dt){
+ if(!G||!ZONE)return;
+ const z=ZONE,L=skl();
+ if(z.name==='maerchen'){
+  const h=L.find(d=>d.k==='hase');
+  if(!h)return;
+  const x0=13*TS+16,x1=33*TS+16,i1=L.find(d=>d.k==='ig'&&d.e===0),i2=L.find(d=>d.k==='ig'&&d.e===1);
+  [i1,i2].forEach(i=>{if(i&&i.show>0)i.show-=dt;});
+  if(h.st==='run'){
+   h.x+=h.dir*175*dt;h.walk+=dt*16;
+   if((h.dir>0&&h.x>=x1-26)||(h.dir<0&&h.x<=x0+26)){
+    h.st='pop';h.t=1.7;h.round++;
+    const ig=h.dir>0?i2:i1;ig.show=1.7;
+    addFx(ig.x,ig.y-34,'Ich bin schon da!','#ffe08a',1.7);sfx('honk');
+   }
+  }else if(h.st==='pop'){
+   h.t-=dt;
+   if(h.t<=0){
+    if(h.round>=3){
+     h.st='tired';h.t=16;i1.show=16;i2.show=16;
+     addFx(h.x,h.y-26,'Hechel ...','#cfd6e0',2);sfx('aww');mood(8,'+8 Wettlauf');
+     if(h.bet==='igel'){G.cash+=5;sfx('coin');toast('Der Igel gewinnt, wie immer. Deine Wette zahlt 5 €. Er und seine Frau klatschen sich ab.');}
+     else if(h.bet==='hase')toast('Der Hase verliert, wie immer. Deine 2 € sind weg, dafür war es herrlich. Er liegt japsend im Acker.');
+     else toast('Der Igel und seine Frau klatschen sich ab. Der Hase liegt japsend im Acker. Müde, aber unversehrt.');
+     h.bet=null;
+    }else{h.dir=-h.dir;h.st='run';}
+   }
+  }else if(h.st==='tired'){
+   h.t-=dt;if(chance(dt*.8))addFx(h.x,h.y-22,'*hechel*','#cfd6e0',1.4);
+   if(h.t<=0){h.st='idle';h.x=x0;h.dir=1;h.round=0;}
+  }
+ }else if(z.name==='schlaraff'){
+  L.forEach(d=>{
+   if(d.k!=='huhn')return;
+   if(d.cd>0)d.cd-=dt;
+   d.steer-=dt;if(d.steer<=0){d.a+=rf(-1,1);d.steer=rf(1.5,3.5);}
+   if(Math.hypot(d.x-24*TS,d.y-15*TS)>520){d.a=Math.atan2(15*TS-d.y,24*TS-d.x);d.steer=2;}
+   d.x=clamp(d.x+Math.cos(d.a)*42*dt,3*TS,(ZW-3)*TS);d.y=clamp(d.y+Math.sin(d.a)*42*dt,3*TS,(ZH-3)*TS);d.walk+=dt*12;
+  });
+ }
+}
+function drawAcker(){
+ const x=11*TS,y=25*TS,w=24*TS,h=3*TS;
+ ctx.fillStyle='#8b6b47';ctx.fillRect(x,y,w,h);
+ ctx.strokeStyle='#6d5236';ctx.lineWidth=2;
+ for(let i=0;i<12;i++){ctx.beginPath();ctx.moveTo(x,y+4+i*8);ctx.lineTo(x+w,y+4+i*8);ctx.stroke();}
+ ctx.lineWidth=1;
+ ctx.fillStyle='#6fae56';for(let i=0;i<9;i++){circle(x+30+i*70,y+h-8,5);}
+ ctx.fillStyle='#fff';ctx.fillRect(x+4,y-6,3,h+6);ctx.fillRect(x+w-7,y-6,3,h+6);
+ ctx.fillStyle='#e5504d';ctx.fillRect(x+4,y-6,10,5);ctx.fillRect(x+w-7,y-6,10,5);
+}
+function drawHase(h){
+ const x=h.x,y=h.y,sl=h.st==='tired',run=h.st==='run',hp=run?Math.abs(Math.sin(h.walk))*5:0,f=h.dir||1;
+ ctx.fillStyle='rgba(0,0,0,.28)';ctx.beginPath();ctx.ellipse(x+2,y+3,13,4,0,0,6.283);ctx.fill();
+ ctx.save();ctx.translate(x,y-hp);ctx.scale(f,1);
+ ctx.fillStyle='#a58f78';
+ if(sl){ctx.beginPath();ctx.ellipse(0,-5,12,5.4,0,0,6.283);ctx.fill();circle(11,-6,5);ctx.beginPath();ctx.ellipse(8,-10,2.4,7,-1.2,0,6.283);ctx.fill();ctx.fillStyle='#ff7f9a';ctx.beginPath();ctx.ellipse(15,-4,2,3.6,0,0,6.283);ctx.fill();}
+ else{
+  ctx.beginPath();ctx.ellipse(-1,-8,10,6.4,0,0,6.283);ctx.fill();
+  const lg=run?Math.sin(h.walk*1.2)*4:0;
+  ctx.fillRect(-9+lg,-3,7,3);ctx.fillRect(4-lg,-3,5,3);
+  circle(9,-13,5);
+  ctx.beginPath();ctx.ellipse(6,-23,2.4,8,-.3,0,6.283);ctx.fill();ctx.beginPath();ctx.ellipse(10,-23,2.4,8,.2,0,6.283);ctx.fill();
+  ctx.fillStyle='#f6c7d0';ctx.beginPath();ctx.ellipse(6,-23,1,5,-.3,0,6.283);ctx.fill();
+ }
+ ctx.fillStyle='#fff';circle(-11,sl?-6:-9,3);
+ ctx.fillStyle='#222';circle(sl?13:12,sl?-7:-14,1.1);
+ ctx.restore();
+}
+function drawIgel(i){
+ if(i.show<=0)return;
+ const rise=Math.min(1,(i.show>1e3?1:Math.min(1.7-Math.max(0,1.7-i.show),i.show))*6);
+ const x=i.x,y=i.y;
+ ctx.fillStyle='rgba(0,0,0,.28)';ctx.beginPath();ctx.ellipse(x+2,y+2,10,4,0,0,6.283);ctx.fill();
+ ctx.save();ctx.translate(x,y-10*Math.min(1,rise));
+ ctx.fillStyle='#6a4a2a';
+ for(let k=0;k<11;k++){const a=Math.PI+k/10*Math.PI;ctx.beginPath();ctx.moveTo(Math.cos(a)*7,Math.sin(a)*7);ctx.lineTo(Math.cos(a)*13,Math.sin(a)*13);ctx.lineTo(Math.cos(a+.25)*7,Math.sin(a+.25)*7);ctx.fill();}
+ ctx.fillStyle='#8a6a42';ctx.beginPath();ctx.ellipse(0,0,10,8,0,Math.PI,0);ctx.fill();
+ ctx.fillStyle='#e8c39e';ctx.beginPath();ctx.ellipse(0,1,8,6,0,0,Math.PI);ctx.fill();ctx.fillRect(-8,-1,16,2);
+ ctx.fillStyle='#222';circle(-3,0,1.1);circle(3,0,1.1);circle(0,2.6,1.3);
+ ctx.strokeStyle='#222';ctx.beginPath();ctx.arc(0,3.6,2,.3,2.8);ctx.stroke();
+ ctx.restore();
+}
+function drawHuhn(d){
+ const t=timeNow,x=d.x,y=d.y,b=Math.sin(t*3+d.x*.01)*3,fl=Math.cos(d.a)<0?-1:1,w=Math.sin(d.walk)*6;
+ ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(x+3,y+6,9,3.4,0,0,6.283);ctx.fill();
+ ctx.save();ctx.translate(x,y-18+b);ctx.scale(fl,1);
+ ctx.fillStyle='#e0a050';ctx.beginPath();ctx.moveTo(-2,-2);ctx.lineTo(-10,-10-w);ctx.lineTo(4,-3);ctx.fill();ctx.beginPath();ctx.moveTo(-2,2);ctx.lineTo(-10,10+w);ctx.lineTo(4,3);ctx.fill();
+ ctx.fillStyle='#c9772f';ctx.beginPath();ctx.ellipse(0,0,10,6.6,0,0,6.283);ctx.fill();
+ ctx.fillStyle='#e29a4a';ctx.beginPath();ctx.ellipse(-1,-2,6,2.6,0,0,6.283);ctx.fill();
+ ctx.fillStyle='#c9772f';circle(10,-3,4.2);ctx.fillStyle='#ffd23f';ctx.beginPath();ctx.moveTo(13,-4);ctx.lineTo(18,-2.6);ctx.lineTo(13,-1.6);ctx.fill();
+ ctx.fillStyle='#222';circle(10,-4.4,1);
+ ctx.fillStyle='#e5504d';ctx.fillRect(8,-8,4,2.4);
+ ctx.fillStyle='#8a5a34';ctx.fillRect(-4,5.4,2.6,5);ctx.fillRect(2,5.4,2.6,5);
+ ctx.restore();
 }
 
 const H={
@@ -3220,7 +3535,7 @@ const SCREENS={
    '<p><b class="am">Leute:</b> Rote Herzen mögen dich. Abklatschen, Umarmen, Tanzen, Wettrennen. Niemand stirbt. Omas holen sich ihren Rollstuhl zurück, Kinder bespritzt du nur mit Wasser.</p>'+
    '<p><b class="am">Winter und Strand:</b> Schneemänner bauen, rodeln, Glühwein trinken. Sandburgen bauen oder kaputt treten, Wasserpistole, schwimmen, Boot fahren. Das Rhein-Schiff am Hafen bringt dich nach Amsterdam.</p>'+
    '<p><b class="am">Meer:</b> Am Wasser OK: Angeln, bei Zucken nochmal OK. Im tiefen Wasser OK: Hai ringen. Der Wal nimmt dich mit in seinen Bauch: Sofa, Tee, Joint.</p>'+
-   '<p><b class="am">Märchen und Sketche:</b> Das Märchenbuch im Park bringt dich in den Märchenwald: Lebkuchenhaus zum Knabbern, liebe Hexe, Frau Holle, sieben Zwerge. In der Stadt laufen manchmal Zwerge oder Stadtmusikanten vorbei, und Frau Holle lässt es schneien. In den Bergen wartet die Weihnachtswerkstatt. Dort versteckt sich ein Berg-Griesgram, der Lebkuchen liebt.</p>'+
+   '<p><b class="am">Märchen und Sketche:</b> Das Märchenbuch im Park bringt dich in den Märchenwald: Lebkuchenhaus zum Knabbern, liebe Hexe, Frau Holle, sieben Zwerge. In der Stadt laufen manchmal Zwerge oder Stadtmusikanten vorbei, und Frau Holle lässt es schneien. In den Bergen wartet die Weihnachtswerkstatt. Dort versteckt sich ein Berg-Griesgram, der Lebkuchen liebt. Im Märchenwald deckt dir das Tischlein Kuchen und Geschenke, und Rotkäppchen braucht Hilfe gegen den naschenden Wolf.</p>'+
    '<p><b class="am">Skurrile Orte:</b> Gullydeckel, Telefonzelle, Dixi und Kühlschrank bringen dich an Strand, Vulkan, in die Berge, Höhle oder in den Märchenwald. Wer zu tief ins Glas schaut, wacht woanders auf.</p>'+
    '<p class="mu">Alles Fiktion, nur ein Spiel.</p></div>'+btn('Zurück','back',null,{def:1})+'</div>'};
  },
